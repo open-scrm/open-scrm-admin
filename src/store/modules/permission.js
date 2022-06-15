@@ -1,4 +1,4 @@
-import { fetchPermission } from '@/api/permission'
+import { fetchUserInfo } from '@/api/permission'
 import router, { DynamicRoutes } from '@/router/index'
 import { recursionRouter } from '@/utils/recursion-router'
 import dynamicRouter from '@/router/dynamic-router'
@@ -42,10 +42,11 @@ export default {
     },
     actions: {
         async FETCH_PERMISSION({ commit, state }) {
-            let permissionList = await fetchPermission()
-            commit('SET_AVATAR', permissionList.avatar)
+            let permissionList = await fetchUserInfo()
+            console.log(permissionList)
+            commit('SET_AVATAR', permissionList.avatar === '' ? '/static/avatar.png' : permissionList.avatar)
             commit('SET_ACCOUNT', permissionList.name)
-            let routes = recursionRouter(permissionList.data, dynamicRouter)
+            let routes = recursionRouter(permissionList.permissions, dynamicRouter)
             let MainContainer = DynamicRoutes.find(v => v.path === '')
             let children = MainContainer.children
             commit('SET_CONTROL_LIST', [...children, ...dynamicRouter])

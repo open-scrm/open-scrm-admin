@@ -13,10 +13,12 @@ function resolve(dir) {
 }
 const proxyTargetMap = {
     prod: 'https://xxx.xxx.com/',
+    dev: 'http://localhost:8080/',
     randy: 'http://47.105.71.81:3306',
     peter: 'http://192.168.11.178:3001'
 }
-let proxyTarget = proxyTargetMap[process.env.API_TYPE] || proxyTargetMap.prod
+console.log(process.env.API_TYPE)
+let proxyTarget = proxyTargetMap[process.env.API_TYPE] || proxyTargetMap.dev
 let publicPath = process.env.NODE_ENV === 'production' ? '/' : '/'
 let dllPublishPath = '/vendor'
 module.exports = {
@@ -101,7 +103,7 @@ module.exports = {
         disableHostCheck: true,
         open: process.platform === 'darwin',
         host: 'localhost',
-        port: 8080,
+        port: 8000,
         https: false,
         hotOnly: false,
         // eslint-disable-next-line no-dupe-keys
@@ -112,7 +114,7 @@ module.exports = {
                 target: proxyTarget,
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/api': ''
+                    '^/api': '/api'
                 }
             }
         },

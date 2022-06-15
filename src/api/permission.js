@@ -1,7 +1,7 @@
 import axios from '@/config/httpConfig'
 
-export function fetchPermission() {
-    return axios.get('/user/info')
+export function fetchUserInfo() {
+    return axios.get('/auth/info')
 }
 
 // 获取用户列表
@@ -25,5 +25,5 @@ export function getNextLevel(id) {
     return axios.get(`/permission/level?id=${id}`)
 }
 export function login(data) {
-    return axios.post('/user/login', data)
+    return axios.post('/auth/login', data)
 }

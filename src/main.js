@@ -44,9 +44,9 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to, from, next) => {
-    var routerList = to.matched
-    store.commit('setCrumbList', routerList)
-    store.commit('permission/SET_CURRENT_MENU', to.name)
+    // var routerList = to.matched
+    // store.commit('setCrumbList', routerList)
+    // store.commit('permission/SET_CURRENT_MENU', to.name)
 })
 
 /* eslint-disable no-new */

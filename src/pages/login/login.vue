@@ -25,7 +25,6 @@
         </el-form>
     </div>
 </template>
-
 <script>
 import { login } from '@/api/permission'
 export default {
@@ -47,7 +46,7 @@ export default {
         return {
             loginForm: {
                 username: 'admin',
-                password: '123456'
+                password: 'admin'
             },
             loginRules: {
                 username: [
@@ -76,8 +75,7 @@ export default {
         async login() {
             try {
                 let data = await login(this.loginForm)
-                let token = data.token
-                this.$store.commit('LOGIN_IN', token)
+                this.$store.commit('LOGIN_IN', data)
                 this.$router.replace('/')
             } catch (e) {
                 console.log(e)

@@ -6,6 +6,11 @@
  */
 
 export function recursionRouter(userRouter = [], allRouter = []) {
+    console.log(userRouter, userRouter.includes('*'))
+    if (userRouter.includes('*')) {
+        return allRouter
+    }
+
     var realRoutes = allRouter
         .filter(item => userRouter.includes(item.name))
         .map(item => ({
