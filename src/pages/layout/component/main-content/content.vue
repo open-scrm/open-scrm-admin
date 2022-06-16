@@ -11,5 +11,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+    .content{
+        min-height: 100%;
+        box-sizing: border-box;
+    }
 </style>

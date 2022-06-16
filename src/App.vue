@@ -15,6 +15,7 @@ export default {
     height: 100%;
     > div {
         height: 100%;
+        background: #EEEEF3;
     }
 }
 </style>
