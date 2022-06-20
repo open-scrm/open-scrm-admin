@@ -9,6 +9,8 @@
                                 node-key="id"
                                 :props="treeProps"
                                 :default-expanded-keys='expandIds'
+                                @check="deptClick"
+                                show-checkbox
                             >
                             <span slot-scope="{node,data}" class="customize-tree-p">
                                 <span class="el-icon-folder ffd23d"></span>
@@ -45,32 +47,60 @@
                           <el-table
                             border
                             ref="multipleTable"
-                            :data="tableData"
+                            :data="users"
                             tooltip-effect="dark"
                             style="width: 100%"
-                            @selection-change="handleSelectionChange">
+                           >
                             <el-table-column
                             type="selection"
                             width="55">
                             </el-table-column>
                             <el-table-column
-                            label="日期"
-                            width="120">
-                            <template slot-scope="scope">{{ scope.row.date }}</template>
+                            label="id"
+                            prop="id"
+                            width="240">
                             </el-table-column>
                             <el-table-column
-                            prop="name"
                             label="姓名"
+                            prop="name"
                             width="120">
                             </el-table-column>
                             <el-table-column
-                            prop="address"
-                            label="地址"
-                            show-overflow-tooltip>
+                            label="所属部门"
+                            show-overflow-tooltip
+                            prop="depts"
+                            width="120">
+                            <template slot-scope="scope">
+                              <span style="margin-left: 10px">{{ join(scope.row.depts) }}</span>
+                            </template>
+                            </el-table-column>
+                            <el-table-column
+                            label="手机号"
+                            prop="mobile"
+                            width="120">
+                            </el-table-column>
+                            <el-table-column
+                            label="角色"
+                            prop="mobile"
+                            width="120">
                             </el-table-column>
                         </el-table>
                     </div>
                     </el-card>
+                    <br>
+
+                     <el-card class="box-card">
+                       <el-pagination
+                        :page-size="listRequest.pageSize"
+                        :total="count"
+                        @size-change="onSizeChange"
+                        @current-change="onCurrentChange"
+                        :page-sizes="[1,20, 50, 100]"
+                        layout="sizes, prev, pager, next"
+                        >
+                      </el-pagination>
+                    </el-card>
+
                 </el-col>
             </el-row>
         </div>
@@ -78,7 +108,7 @@
 </template>
 
 <script>
-import { listDepts } from '@/api/addressbook'
+import { listDepts, listUsers } from '@/api/addressbook'
 
 export default {
     data() {
@@ -86,76 +116,71 @@ export default {
             listRequest: {
                 keyword: '',
                 page: 1,
-                pageSize: 20,
+                pageSize: 1,
                 order: 'order',
-                asc: true
+                asc: true,
+                deptIds: []
+            },
+            deptListRequest: {
+                name: ''
             },
             deptList: [],
             count: 0,
             expandIds: [],
+            activeDeptId: 0,
             treeProps: {
                 children: 'children',
                 label: 'name'
             },
-            tableData: [{
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                date: '2016-05-08',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                date: '2016-05-06',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                date: '2016-05-07',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }],
-                multipleSelection: []
+            users: [],
+            multipleSelection: []
         }
     },
-    created() {
-        this.initList()
+    async created() {
+        await this.initDeptList()
+        await this.initUserList()
     },
     methods: {
-        async initList() {
-            const data = await listDepts(this.listRequest)
+        async initDeptList() {
+            const data = await listDepts(this.deptListRequest)
             this.deptList = [data]
             this.expandIds = [data.id]
-            console.log(data)
+            this.listRequest.deptIds = [data.id]
+        },
+        async initUserList() {
+            const users = await listUsers(this.listRequest)
+            this.users = users.data
+            this.count = users.count
+            console.log(users.count)
         },
         onSearch() {
-            this.initList()
+            this.initUserList()
         },
         handleReset() {
             this.listRequest.keyword = ''
         },
-        handleSizeChange(e) {
-            this.listRequest.pageSize = e
-            this.initList()
-        },
-        handleCurrentChange(e) {
-            this.listRequest.page = e
-            this.initList()
-        },
         clean(formName) {
             console.log(this.$refs[formName])
             this.$refs[formName].resetFields()
+        },
+        join(arr) {
+            return arr.join(',')
+        },
+        deptClick(_, checkedKeys, c) {
+            this.listRequest.deptIds = checkedKeys.checkedKeys
+            console.log(checkedKeys)
+            this.initUserList()
+        },
+        onSizeChange(e) {
+            if (e < 0) {
+                return
+            }
+            this.listRequest.pageSize = e
+            this.initUserList()
+        },
+        onCurrentChange(e) {
+            this.listRequest.page = e
+            this.initUserList()
         }
     }
 }

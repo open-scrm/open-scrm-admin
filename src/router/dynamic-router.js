@@ -18,7 +18,7 @@ const UserManage = () => import('@/pages/permission/user-manage')
 const RoleManage = () => import('@/pages/permission/role-manage')
 const MenuManage = () => import('@/pages/permission/menu-manage')
 // 系统设置:
-const DeptList = () => import('@/pages/system/dept-list')
+const UserList = () => import('@/pages/system/userlist')
 /* 需要权限判断的路由 */
 const dynamicRoutes = [
     {
@@ -32,10 +32,10 @@ const dynamicRoutes = [
         children: [
             {
                 path: 'dept/list',
-                name: 'dept-list',
-                component: DeptList,
+                name: 'userlist',
+                component: UserList,
                 meta: {
-                    name: '部门列表',
+                    name: '员工管理',
                     icon: 'folder'
                 }
             }
