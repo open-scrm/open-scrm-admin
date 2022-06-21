@@ -19,8 +19,29 @@ const RoleManage = () => import('@/pages/permission/role-manage')
 const MenuManage = () => import('@/pages/permission/menu-manage')
 // 系统设置:
 const UserList = () => import('@/pages/system/userlist')
+// 客户管理
+const CustomerList = () => import('@/pages/customer/customer-list')
 /* 需要权限判断的路由 */
 const dynamicRoutes = [
+    {
+        path: '/customer',
+        component: Order,
+        name: 'customer-manage',
+        meta: {
+            name: '客户管理',
+            icon: 's-custom'
+        },
+        children: [
+            {
+                path: 'list',
+                name: 'customerList',
+                component: CustomerList,
+                meta: {
+                    name: '联系人'
+                }
+            }
+        ]
+    },
     {
         path: '/system',
         component: Order,
@@ -35,8 +56,7 @@ const dynamicRoutes = [
                 name: 'userlist',
                 component: UserList,
                 meta: {
-                    name: '员工管理',
-                    icon: 'folder'
+                    name: '员工管理'
                 }
             }
         ]
