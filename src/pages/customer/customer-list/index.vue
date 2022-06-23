@@ -12,6 +12,16 @@
                     <div class="search-box">
                         <el-form :inline="true" :model="listRequest" ref='listRequest'>
                             <el-form-item>
+                             <el-select size="mini" multiple v-model="listRequest.type" placeholder="请选择">
+                              <el-option
+                                v-for="item in userTypes"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                              </el-option>
+                            </el-select>
+                            </el-form-item>
+                            <el-form-item>
                                 <el-input
                                   size="mini"
                                   v-model="listRequest.name"
@@ -205,6 +215,21 @@ export default {
                 createTimeLte: 0,
                 tags: []
             },
+            type: [],
+            userTypes: [
+                {
+                    label: '微信好友',
+                    value: 1
+                },
+                {
+                    label: '企业微信好友',
+                    value: 2
+                },
+                {
+                    label: '普通客户',
+                    value: 3
+                }
+            ],
             list: [],
             count: 0,
             drawer: false,
